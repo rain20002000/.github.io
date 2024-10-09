@@ -5,20 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>日本地図（47都道府県）</title>
     <style>
-        #map-container {
-            width: 600px;
-            height: 600px;
-            margin: 0 auto;
-        }
-        path {
-            fill: #ccc;
-            stroke: #fff;
-            stroke-width: 0.5;
-            transition: fill 0.3s;
-        }
-        path:hover {
-            fill: #f00;
-        }
+ #map-container {
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+svg {
+    width: 100%;
+    height: 100%;
+    max-width: 800px;
+    max-height: 800px;
+}
+path {
+    fill: #ccc;
+    stroke: #fff;
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    transition: fill 0.3s;
+}
+path:hover {
+    fill: #f00;
+}
     </style>
 </head>
 <body>
@@ -81,21 +91,25 @@
     "鹿児島": "M380 270L390 280 380 290 370 280 380 270 M358 272L368 274 380 276 392 278 404 280 416 282 428 284 440 286 452 288 464 290 476 292 488 294 500 296 512 298 524 300 536 302 548 304 560 306 572 308 584 310 596 312 600 314 600 600 336 600 336 590 344 584 352 578 360 566 368 554 376 542 384 530 392 518 400 506 408 494 416 482 424 470 432 458 440 446 448 434 456 422 464 410 472 398 480 386 488 374 496 362 504 350 512 338 520 326 528 314 536 302 544 290 552 278 560 266 568 254 576 242 584 230 592 218 600 206 596 312 584 310 572 308 560 306 548 304 536 302 524 300 512 298 500 296 488 294 476 292 464 290 452 288 440 286 428 284 416 282 404 280 392 278 380 276 368 274 358 272Z",
     "沖縄": "M300 300L310 310 300 320 290 310 300 300 M278 302L288 304 300 306 312 308 324 310 336 312 348 314 360 316 372 318 384 320 396 322 408 324 420 326 432 328 444 330 456 332 468 334 480 336 492 338 504 340 516 342 528 344 540 346 552 348 564 350 576 352 588 354 600 356 600 600 336 600 336 590 344 584 352 578 360 566 368 554 376 542 384 530 392 518 400 506 408 494 416 482 424 470 432 458 440 446 448 434 456 422 464 410 472 398 480 386 488 374 496 362 504 350 512 338 520 326 528 314 536 302 544 290 552 278 560 266 568 254 576 242 584 230 592 218 600 206 588 354 576 352 564 350 552 348 540 346 528 344 516 342 504 340 492 338 480 336 468 334 456 332 444 330 432 328 420 326 408 324 396 322 384 320 372 318 360 316 348 314 336 312 324 310 312 308 300 306 288 304 278 302Z",
 };
+        
+Object.entries(japanMapData).forEach(([prefecture, path]) => {
+    console.log(`${prefecture}: ${path.slice(0, 20)}...`);
+});
+const svg = d3.select("#map-container")
+    .append("svg")
+    .attr("viewBox", "0 0 600 600")
+    .attr("preserveAspectRatio", "xMidYMid meet");
 
-        const svg = d3.select("#map-container")
-            .append("svg")
-            .attr("viewBox", "0 0 600 600")
-            .attr("width", "100%")
-            .attr("height", "100%");
+const g = svg.append("g");
 
-        Object.entries(japanMapData).forEach(([prefecture, path]) => {
-            svg.append("path")
-                .attr("d", path)
-                .attr("title", prefecture)
-                .on("click", function() {
-                    alert(`${prefecture}がクリックされました！`);
-                });
+Object.entries(japanMapData).forEach(([prefecture, path]) => {
+    g.append("path")
+        .attr("d", path)
+        .attr("title", prefecture)
+        .on("click", function() {
+            alert(`${prefecture}がクリックされました！`);
         });
+});
     </script>
 </body>
 </html>
